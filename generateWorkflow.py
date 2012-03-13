@@ -13,9 +13,8 @@ def parseOptions():
     argParser = argparse.ArgumentParser(
         description='Generate workflow. (requires python >= 2.7)'
     )
-    argParser.add_argument('-n', '--name',
-        help = 'family logical name',
-        dest = 'familyName')
+    argParser.add_argument('familyName',
+        help = 'family logical name')
     argParser.add_argument('--templateDir',
         help = 'templates directory',
         dest = 'templateDir',
@@ -30,8 +29,6 @@ def parseOptions():
         dest = 'force',
         default = False)
     args = argParser.parse_args()
-    if(not args.familyName):
-        args.familyName = raw_input("Give me your logical Name : ")
     return args
 
 def getWflMemo(templateValues):
