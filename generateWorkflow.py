@@ -2,16 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from string import Template
-import sys
 import os
-
-if sys.version_info < (2, 7):
-    raise "must use python 2.7 or greater"
 import argparse
 
 def parseOptions():
     argParser = argparse.ArgumentParser(
-        description='Generate workflow. (requires python >= 2.7)'
+        description='Generate workflow.'
     )
     argParser.add_argument('familyName',
         help = 'family logical name')

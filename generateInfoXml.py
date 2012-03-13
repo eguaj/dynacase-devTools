@@ -6,9 +6,6 @@ import os
 from xml.dom.ext import PrettyPrint
 from StringIO import StringIO
 import sys
-
-if sys.version_info < (2, 7):
-    raise "must use python 2.7 or greater"
 import argparse
 
 def toprettyxml_fixed (node, encoding='utf-8'):
@@ -28,7 +25,7 @@ def addTarget(node, targetNode):
     node.appendChild(localNode.cloneNode(True))
 
 def parseOptions():
-    argParser = argparse.ArgumentParser(description='Generate info.xml file from targets. (requires PyXML and python >= 2.7)')
+    argParser = argparse.ArgumentParser(description='Generate info.xml file from targets. (requires PyXML)')
     argParser.add_argument('--to',
         help = 'info.xml target',
         default = os.path.join('..', 'info.xml.in'),

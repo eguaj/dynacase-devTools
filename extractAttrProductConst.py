@@ -8,7 +8,7 @@ import argparse
 
 def parseOptions():
     argParser = argparse.ArgumentParser(
-        description='inserts constants for attributes and parameters in Method files. (requires python >= 2.7)'
+        description='inserts constants for attributes and parameters in Method files.'
     )
     argParser.add_argument('familiesFolder',
         help = 'families folder',

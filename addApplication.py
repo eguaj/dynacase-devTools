@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import sys
+import argparse
 import os
 import shutil
 import fileinput
@@ -10,10 +10,6 @@ from string import Template
 from os.path import dirname
 
 from utils import copytree
-
-if sys.version_info < (2, 7):
-    raise "must use python 2.7 or greater"
-import argparse
 
 def parseOptions():
     argParser = argparse.ArgumentParser(
