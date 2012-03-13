@@ -44,7 +44,7 @@ def parseOptions():
         default = False)
     args = argParser.parse_args()
     if(not args.familyTitle):
-        args.familyTitle = "title for %s"%(args.familyName.upper())
+        args.familyTitle = args.familyName.upper()
     return args
 
 def getStructMemo(templateValues):
