@@ -7,10 +7,7 @@ import os.path
 
 from generateWorkflow import generateWorkflow,getWflMemo
 
-def parseOptions():
-    argParser = argparse.ArgumentParser(
-        description='Generate Family files.'
-    )
+def defineParseArguments(argParser):
     argParser.add_argument('familyName',
         help = 'family logical name')
     argParser.add_argument('-f', '--fromName',
@@ -38,6 +35,12 @@ def parseOptions():
         action = 'store_true',
         dest = 'withWorkflow',
         default = False)
+
+def parseOptions():
+    argParser = argparse.ArgumentParser(
+        description='Generate Family files.'
+    )
+    defineParseArguments(argParser)
     args = argParser.parse_args()
     if(not args.familyTitle):
         args.familyTitle = args.familyName.upper()
@@ -93,9 +96,7 @@ def generateFamily(templateValues, args):
         else:
             print "no template found for %s"%(target)
 
-def main():
-    args = parseOptions()
-
+def executeGenerateFamily(args):
     templateValues = {
         'familyTitle'    : args.familyTitle,
         'familyIcon'     : "%s.png"%(args.familyName.lower()),
@@ -108,7 +109,6 @@ def main():
     }
     if(templateValues['fromClass'] != 'Doc'):
         templateValues['fromClass'] = '_' + templateValues['fromClass']
-
     try:
         generateFamily(templateValues, args)
         if(args.withWorkflow):
@@ -118,7 +118,11 @@ def main():
             print(getWflMemo(templateValues))
         print(getParamMemo(templateValues))
     except NameError:
-        return
+        return 
+
+def main():
+    executeGenerateFamily(parseOptions())
+    
 
 if __name__ == "__main__":
     main()

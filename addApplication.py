@@ -11,10 +11,7 @@ from os.path import dirname
 
 from utils import copytree
 
-def parseOptions():
-    argParser = argparse.ArgumentParser(
-        description='add a new application in current module'
-    )
+def defineParseArguments(argParser):
     argParser.add_argument('appName',
         help = 'application name')
     argParser.add_argument('-c', '--childof',
@@ -29,6 +26,13 @@ def parseOptions():
         help = 'target directory, where generated files will be placed',
         dest = 'targetDir',
         default = None)
+
+
+def parseOptions():
+    argParser = argparse.ArgumentParser(
+        description='Add a new application in current module'
+    )
+    defineParseArguments(argParser)
     args = argParser.parse_args()
     return args
 
@@ -77,14 +81,17 @@ def addApplication(appName, childOf='', appShortName='', templateDir=None, targe
     shutil.move(tempDir, os.path.join(targetDir, appName.upper()))
     return
 
-def main():
-    args = parseOptions()
+def executeAddApplication(args):
     addApplication(
         args.appName,
         childOf = args.childOf,
         appShortName = args.appName.capitalize(),
         templateDir = args.templateDir,
         targetDir = args.targetDir)
+
+def main():
+   executeAddApplication(parseOptions())
+    
 
 if __name__ == "__main__":
     main()

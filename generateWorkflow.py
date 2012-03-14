@@ -5,10 +5,7 @@ from string import Template
 import os
 import argparse
 
-def parseOptions():
-    argParser = argparse.ArgumentParser(
-        description='Generate workflow.'
-    )
+def defineParseArguments(argParser):
     argParser.add_argument('familyName',
         help = 'family logical name')
     argParser.add_argument('--templateDir',
@@ -24,6 +21,12 @@ def parseOptions():
         action = 'store_true',
         dest = 'force',
         default = False)
+
+def parseOptions():
+    argParser = argparse.ArgumentParser(
+        description='Generate workflow.'
+    )
+    defineParseArguments(argParser)
     args = argParser.parse_args()
     return args
 
@@ -69,9 +72,7 @@ def generateWorkflow(templateValues, args):
         else:
             print "no template found for %s"%(target)
 
-def main():
-    args = parseOptions()
-
+def executeGenerateWorkflow(args):
     templateValues = {
         'familyName' : args.familyName.upper()
     }
@@ -81,6 +82,11 @@ def main():
         print(getWflMemo(templateValues))
     except NameError:
         return
+
+def main():
+    executeGenerateWorkflow(parseOptions())
+
+    
 
 if __name__ == "__main__":
     main()

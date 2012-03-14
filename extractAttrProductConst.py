@@ -6,10 +6,7 @@ import codecs
 import string
 import argparse
 
-def parseOptions():
-    argParser = argparse.ArgumentParser(
-        description='inserts constants for attributes and parameters in Method files.'
-    )
+def defineParseArguments(argParser):
     argParser.add_argument('familiesFolder',
         help = 'families folder',
         nargs = '?',
@@ -22,6 +19,12 @@ def parseOptions():
         help = 'verbose',
         action = 'count',
         dest = 'verbosity')
+
+def parseOptions():
+    argParser = argparse.ArgumentParser(
+        description='Inserts constants for attributes and parameters in Method files.'
+    )
+    defineParseArguments(argParser)
     args = argParser.parse_args()
     if(not args.csvFiles):
         args.csvFiles = getFamilyFiles(args.familiesFolder)
@@ -106,10 +109,13 @@ def extractAttr(directory, structFileName):
                         methodFile.close()
                         print "\t%s attributes written in %s for %s"%(len(attributes), os.path.basename(methodFileName), os.path.basename(structFileName))
 
-def main():
-    args = parseOptions()
+def executeExtractAttr(args):
     for fileName in args.csvFiles:
         extractAttr(args.familiesFolder, fileName)
+
+def main():
+    executeExtractAttr(parseOptions())
+    
 
 if __name__ == "__main__":
     main()

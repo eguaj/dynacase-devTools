@@ -24,8 +24,7 @@ def addTarget(node, targetNode):
     localNode = node.ownerDocument.importNode(targetNode, True)
     node.appendChild(localNode.cloneNode(True))
 
-def parseOptions():
-    argParser = argparse.ArgumentParser(description='Generate info.xml file from targets. (requires PyXML)')
+def defineParseArguments(argParser):
     argParser.add_argument('--to',
         help = 'info.xml target',
         default = os.path.join('..', 'info.xml.in'),
@@ -45,6 +44,11 @@ def parseOptions():
         help = 'target to include in produced file (use several times to add multiple targets',
         nargs = '*',
         metavar = 'targetId')
+    return argParser
+
+def parseOptions():
+    argParser = argparse.ArgumentParser(description='Generate info.xml file from targets. (requires PyXML)')
+    defineParseArguments(argParser)
     args = argParser.parse_args()
     if(not args.phases):
         #args.phases = ['pre-install', 'post-install', 'pre-upgrade', 'post-upgrade']
@@ -119,9 +123,11 @@ def generateInfoXml(targetsFile, infoXmlFile, targetIds, phases):
 
     return toprettyxml_fixed(infoXmlDom)
 
-def main():
-    args = parseOptions()
+def executeInfoXml(args):
     print generateInfoXml(args.targetsFile, args.infoXmlFile, args.targetIds, args.phases)
+
+def main():
+    executeInfoXml(parseOptions())
 
 
 if __name__ == "__main__":
