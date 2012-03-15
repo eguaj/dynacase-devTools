@@ -26,8 +26,6 @@ def parseOptions():
     )
     defineParseArguments(argParser)
     args = argParser.parse_args()
-    if(not args.csvFiles):
-        args.csvFiles = getFamilyFiles(args.familiesFolder)
     return args
 
 def getFamilyFiles(familiesFolder):
@@ -110,6 +108,8 @@ def extractAttr(directory, structFileName):
                         print "\t%s attributes written in %s for %s"%(len(attributes), os.path.basename(methodFileName), os.path.basename(structFileName))
 
 def executeExtractAttr(args):
+    if(not args.csvFiles):
+        args.csvFiles = getFamilyFiles(args.familiesFolder)
     for fileName in args.csvFiles:
         extractAttr(args.familiesFolder, fileName)
 

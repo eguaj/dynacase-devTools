@@ -42,8 +42,6 @@ def parseOptions():
     )
     defineParseArguments(argParser)
     args = argParser.parse_args()
-    if(not args.familyTitle):
-        args.familyTitle = args.familyName.upper()
     return args
 
 def getStructMemo(templateValues):
@@ -97,6 +95,8 @@ def generateFamily(templateValues, args):
             print "no template found for %s"%(target)
 
 def executeGenerateFamily(args):
+    if(not args.familyTitle):
+        args.familyTitle = args.familyName.upper()
     templateValues = {
         'familyTitle'    : args.familyTitle,
         'familyIcon'     : "%s.png"%(args.familyName.lower()),

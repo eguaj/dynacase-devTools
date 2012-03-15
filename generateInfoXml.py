@@ -50,9 +50,6 @@ def parseOptions():
     argParser = argparse.ArgumentParser(description='Generate info.xml file from targets. (requires PyXML)')
     defineParseArguments(argParser)
     args = argParser.parse_args()
-    if(not args.phases):
-        #args.phases = ['pre-install', 'post-install', 'pre-upgrade', 'post-upgrade']
-        args.phases = ['post-install', 'post-upgrade']
     return args
 
 def listTargets(targetsDom):
@@ -124,6 +121,9 @@ def generateInfoXml(targetsFile, infoXmlFile, targetIds, phases):
     return toprettyxml_fixed(infoXmlDom)
 
 def executeInfoXml(args):
+    if(not args.phases):
+        #args.phases = ['pre-install', 'post-install', 'pre-upgrade', 'post-upgrade']
+        args.phases = ['post-install', 'post-upgrade']
     print generateInfoXml(args.targetsFile, args.infoXmlFile, args.targetIds, args.phases)
 
 def main():
