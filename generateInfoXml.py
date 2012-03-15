@@ -32,7 +32,7 @@ def defineParseArguments(argParser):
         metavar = './info.xml.in')
     argParser.add_argument('--from',
         help = 'targets file',
-        default = os.path.join(os.getcwd(), 'targets.xml'),
+        default = os.path.join('..', 'targets.xml'),
         dest = 'targetsFile',
         metavar = './targets.xml')
     argParser.add_argument('-p', '--phase',
