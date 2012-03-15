@@ -44,6 +44,11 @@ def defineParseArguments(argParser):
         help = 'target to include in produced file (use several times to add multiple targets',
         nargs = '*',
         metavar = 'targetId')
+    argParser.add_argument('--verbose',
+        help = 'verbose',
+        action = 'store_true',
+        dest = 'verbose',
+        default = False)
     return argParser
 
 def parseOptions():
@@ -76,7 +81,7 @@ def getNodes(document, phases):
             nodes[phase] = document.documentElement.appendChild(document.createElement(phase))
     return nodes
 
-def appendTarget(nodes, targetNode, phases, targetsFile, visitedProfileIds):
+def appendTarget(nodes, targetNode, phases, targetsFile, visitedProfileIds, verbose):
     if(targetNode.nodeName == 'profile'):
         currentProfileId = targetNode.getAttribute('id')
         if(currentProfileId in visitedProfileIds):
@@ -88,20 +93,21 @@ def appendTarget(nodes, targetNode, phases, targetsFile, visitedProfileIds):
                 refTargetNode = targetNode.ownerDocument.getElementById(refTargetId)
                 if(not refTargetNode):
                     raise NameError('There is no target with this id: %s#%s'%(targetsFile,refTargetId))
-                appendTarget(nodes, refTargetNode, phases, targetsFile, visitedProfileIds)
+                appendTarget(nodes, refTargetNode, phases, targetsFile, visitedProfileIds, verbose)
     else:
         useFor = targetNode.getAttribute('usefor')
         if(not useFor):
             useFor = phases
         for phase in phases:
             if(phase in useFor):
-                commentNode = nodes[phase].ownerDocument.createComment('generated from target %s#%s (%s)'%(targetsFile, targetNode.getAttribute('id'), targetNode.getAttribute('label')))
-                nodes[phase].appendChild(commentNode)
+                if (verbose):
+                    commentNode = nodes[phase].ownerDocument.createComment('generated from target %s#%s (%s)'%(targetsFile, targetNode.getAttribute('id'), targetNode.getAttribute('label')))
+                    nodes[phase].appendChild(commentNode)
                 for process in targetNode.childNodes:
                     localNode = nodes[phase].ownerDocument.importNode(process, True)
                     nodes[phase].appendChild(localNode)
 
-def generateInfoXml(targetsFile, infoXmlFile, targetIds, phases):
+def generateInfoXml(targetsFile, infoXmlFile, targetIds, phases, verbose):
     targetsDom = xml.dom.minidom.parse(open(targetsFile, 'r'))
 
     if(len(targetIds) == 0):
@@ -116,7 +122,7 @@ def generateInfoXml(targetsFile, infoXmlFile, targetIds, phases):
         if(not targetNode):
             raise NameError('There is no target with this id: %s#%s'%(targetsFile,targetId))
 
-        appendTarget(nodes, targetNode, phases, targetsFile, visitedProfileIds)
+        appendTarget(nodes, targetNode, phases, targetsFile, visitedProfileIds, verbose)
 
     return toprettyxml_fixed(infoXmlDom)
 
@@ -124,7 +130,7 @@ def executeInfoXml(args):
     if(not args.phases):
         #args.phases = ['pre-install', 'post-install', 'pre-upgrade', 'post-upgrade']
         args.phases = ['post-install', 'post-upgrade']
-    print generateInfoXml(args.targetsFile, args.infoXmlFile, args.targetIds, args.phases)
+    print generateInfoXml(args.targetsFile, args.infoXmlFile, args.targetIds, args.phases, args.verbose)
 
 def main():
     executeInfoXml(parseOptions())
