@@ -1,6 +1,6 @@
-import os.path
+import os, inspect
 
-projectDir = os.path.dirname(os.path.dirname(__file__))
+projectDir = os.path.dirname(inspect.getfile(inspect.currentframe()))
 
 # directory that should be watched for changes
 wpath = projectDir
@@ -12,7 +12,7 @@ rpath = os.path.basename(projectDir)
 
 # remote locations in rsync syntax
 rnodes = [
-    # "dynacase@dynacase.local:%s" % rpath
+    "dynacase@dynacase.local:%s" % rpath
 ]
 
 # limit remote sync speed (in KB/s, 0 = no limit)
